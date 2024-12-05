@@ -1,63 +1,77 @@
 # Task Management System
 
-A modern task management system built with .NET Core and GraphQL, featuring user preferences and push notifications support.
+A modern, full-stack task management system built with .NET Core backend (GraphQL) and Vue.js frontend. Features a clean, responsive UI and real-time task management capabilities.
 
-## Technology Stack
+## 🚀 Technology Stack
 
-- **Backend**: .NET Core 9.0 with Hot Chocolate GraphQL
-- **Database**: SQLite
-- **API**: GraphQL with built-in Banana UI
-- **Future Frontend**: React with Apollo Client (coming soon)
-- **Future CMS**: Strapi (planned)
+### Backend
+- **.NET Core 9.0** with Hot Chocolate GraphQL
+- **SQLite** database
+- **GraphQL API** with built-in Banana UI for testing
 
-## Features
+### Frontend
+- **Vue.js 3** with TypeScript
+- **Tailwind CSS** for styling
+- **Apollo Client** for GraphQL integration
+- **Vite** for development and building
 
-- GraphQL API with mutations and queries
-- Task management (create, read, update, delete)
-- User preferences system
-- Built-in GraphQL playground (Banana UI)
-- Pagination, filtering, and sorting support
-- Proper timestamp handling for task creation and completion
+## ✨ Features
 
-## Getting Started
+- **Task Management**
+  - Create, read, update, and delete tasks
+  - Mark tasks as complete/incomplete
+  - Task filtering and sorting
+  - Pagination support
+
+- **User Experience**
+  - Clean, modern UI with Tailwind CSS
+  - Responsive design for all devices
+  - Real-time updates
+  - User preferences system
+
+- **Developer Experience**
+  - GraphQL API with built-in playground
+  - Type-safe frontend with TypeScript
+  - Hot Module Replacement (HMR)
+  - Comprehensive GraphQL queries and mutations
+
+## 🛠 Getting Started
 
 ### Prerequisites
 
-- .NET 9.0 SDK
-- An IDE (Visual Studio Code, Visual Studio, or Rider)
+- Node.js 18+ (for frontend)
+- .NET 9.0 SDK (for backend)
+- An IDE (VS Code recommended)
 
-### Installation
+### Installation & Setup
 
 1. Clone the repository:
    ```bash
    git clone [repository-url]
-   cd csharpbackend
+   cd TaskManagementApp
    ```
 
-2. Navigate to the API project:
+2. Start the Backend:
    ```bash
-   cd TaskManagementAPI
-   ```
-
-3. Restore dependencies:
-   ```bash
+   cd backend
    dotnet restore
-   ```
-
-4. Run the application:
-   ```bash
    dotnet run
    ```
+   Backend will start on http://localhost:5001
 
-The API will start on `http://localhost:5001` by default.
+3. Start the Frontend:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   Frontend will start on http://localhost:5173
 
-### GraphQL Endpoint
+### GraphQL API
 
-The GraphQL endpoint and UI are available at:
-- GraphQL Playground (Banana UI): http://localhost:5001/graphql
-- GraphQL API Endpoint: http://localhost:5001/graphql
+Access the GraphQL playground at http://localhost:5001/graphql
 
-### Example Queries
+#### Example Queries
 
 1. Create a task:
 ```graphql
@@ -95,29 +109,45 @@ query GetAllTasks {
 }
 ```
 
-## Project Structure
+## 📁 Project Structure
 
-- `TaskManagementAPI/`: Main API project
-  - `Data/`: Database context and configurations
-  - `GraphQL/`: GraphQL types, queries, and mutations
-  - `Models/`: Domain models
-  - `Program.cs`: Application configuration and startup
+```
+TaskManagementApp/
+├── backend/                 # .NET Core backend
+│   ├── Data/               # Database context
+│   ├── GraphQL/            # GraphQL types and resolvers
+│   ├── Models/            # Domain models
+│   └── Program.cs         # App configuration
+│
+├── frontend/               # Vue.js frontend
+│   ├── src/
+│   │   ├── components/    # Vue components
+│   │   ├── config/       # Configuration files
+│   │   └── assets/       # Static assets
+│   └── public/           # Public assets
+```
 
-## Development Notes
+## 📝 TODO List
 
-- The application uses port 5001 by default, but this can be configured in `Properties/launchSettings.json`
+- [ ] Add authentication system
+- [ ] Implement user roles and permissions
+- [ ] Add task categories and tags
+- [ ] Implement task due dates and reminders
+- [ ] Add task priority levels
+- [ ] Implement task sharing between users
+- [ ] Add dark mode support
+- [ ] Implement real-time notifications
+- [ ] Add task attachments support
+- [ ] Implement task comments system
+
+## 🔧 Development Notes
+
+- Backend runs on port 5001 by default
+- Frontend runs on port 5173 with HMR enabled
 - SQLite database is created automatically on first run
-- GraphQL UI is enabled in development mode
+- GraphQL playground is enabled in development mode
 
-## Future Enhancements
-
-- React frontend integration
-- Strapi CMS integration
-- Push notification system
-- Enhanced user preferences
-- Authentication and authorization
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -125,6 +155,6 @@ query GetAllTasks {
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details 

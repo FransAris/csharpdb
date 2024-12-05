@@ -9,29 +9,40 @@ namespace TaskManagementAPI.GraphQL;
 
 public class Query
 {
-    [UseDbContext(typeof(AppDbContext))]
     [UsePaging]
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<TaskModel> GetTasks([Service(ServiceKind.Pooled)] AppDbContext context)
-        => context.Tasks.OrderByDescending(t => t.CreatedAt);
+    public IQueryable<TaskModel> GetTasks([Service] IDbContextFactory<AppDbContext> contextFactory)
+    {
+        var context = contextFactory.CreateDbContext();
+        return context.Tasks.OrderByDescending(t => t.CreatedAt);
+    }
 
-    [UseDbContext(typeof(AppDbContext))]
-    public async Task<TaskModel?> GetTaskById([Service(ServiceKind.Pooled)] AppDbContext context, int id)
-        => await context.Tasks.FindAsync(id);
+    public async Task<TaskModel?> GetTaskById(
+        [Service] IDbContextFactory<AppDbContext> contextFactory,
+        int id)
+    {
+        using var context = contextFactory.CreateDbContext();
+        return await context.Tasks.FindAsync(id);
+    }
 
-    [UseDbContext(typeof(AppDbContext))]
     [UsePaging]
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<UserPreferencesModel> GetUserPreferences([Service(ServiceKind.Pooled)] AppDbContext context)
-        => context.UserPreferences.OrderBy(u => u.UserId);
+    public IQueryable<UserPreferencesModel> GetUserPreferences(
+        [Service] IDbContextFactory<AppDbContext> contextFactory)
+    {
+        var context = contextFactory.CreateDbContext();
+        return context.UserPreferences.OrderBy(u => u.UserId);
+    }
 
-    [UseDbContext(typeof(AppDbContext))]
     public async Task<UserPreferencesModel?> GetUserPreferencesByUserId(
-        [Service(ServiceKind.Pooled)] AppDbContext context,
+        [Service] IDbContextFactory<AppDbContext> contextFactory,
         string userId)
-        => await context.UserPreferences.FirstOrDefaultAsync(u => u.UserId == userId);
+    {
+        using var context = contextFactory.CreateDbContext();
+        return await context.UserPreferences.FirstOrDefaultAsync(u => u.UserId == userId);
+    }
 }

@@ -8,12 +8,12 @@ namespace TaskManagementAPI.GraphQL;
 
 public class Mutation
 {
-    [UseDbContext(typeof(AppDbContext))]
     public async Task<TaskModel> AddTask(
-        [Service(ServiceKind.Pooled)] AppDbContext context,
+        [Service] IDbContextFactory<AppDbContext> contextFactory,
         string title,
         string description)
     {
+        using var context = contextFactory.CreateDbContext();
         var task = new TaskModel
         {
             Title = title,
@@ -27,14 +27,14 @@ public class Mutation
         return task;
     }
 
-    [UseDbContext(typeof(AppDbContext))]
     public async Task<TaskModel?> UpdateTask(
-        [Service(ServiceKind.Pooled)] AppDbContext context,
+        [Service] IDbContextFactory<AppDbContext> contextFactory,
         int id,
         string? title = null,
         string? description = null,
         bool? isCompleted = null)
     {
+        using var context = contextFactory.CreateDbContext();
         var task = await context.Tasks.FindAsync(id);
         if (task == null) return null;
 
@@ -57,11 +57,11 @@ public class Mutation
         return task;
     }
 
-    [UseDbContext(typeof(AppDbContext))]
     public async Task<bool> DeleteTask(
-        [Service(ServiceKind.Pooled)] AppDbContext context,
+        [Service] IDbContextFactory<AppDbContext> contextFactory,
         int id)
     {
+        using var context = contextFactory.CreateDbContext();
         var task = await context.Tasks.FindAsync(id);
         if (task == null) return false;
 
@@ -70,14 +70,14 @@ public class Mutation
         return true;
     }
 
-    [UseDbContext(typeof(AppDbContext))]
     public async Task<UserPreferencesModel> AddOrUpdateUserPreferences(
-        [Service(ServiceKind.Pooled)] AppDbContext context,
+        [Service] IDbContextFactory<AppDbContext> contextFactory,
         string userId,
         string? theme = null,
         string? language = null,
         bool? emailNotifications = null)
     {
+        using var context = contextFactory.CreateDbContext();
         var preferences = await context.UserPreferences
             .FirstOrDefaultAsync(u => u.UserId == userId);
 

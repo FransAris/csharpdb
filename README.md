@@ -1,160 +1,75 @@
-# Task Management System
+# Task Management API Thing
 
-A modern, full-stack task management system built with .NET Core backend (GraphQL) and Vue.js frontend. Features a clean, responsive UI and real-time task management capabilities.
+This is my experimental project to learn how to build a C# backend with a React frontend. I wanted to try making something like a headless CMS to manage tasks and stuff.
 
-## 🚀 Technology Stack
+## What's This All About?
 
-### Backend
-- **.NET Core 9.0** with Hot Chocolate GraphQL
-- **SQLite** database
-- **GraphQL API** with built-in Banana UI for testing
+It's basically a task manager where I'm testing out:
+- GraphQL API with Hot Chocolate (picked this over REST because I wanted to learn GraphQL)
+- Entity Framework Core with SQLite (just using SQLite because it's simple for testing)
+- Some basic auth stuff (nothing fancy)
+- WebSocket support (might do real-time updates later, we'll see)
 
-### Frontend
-- **Vue.js 3** with TypeScript
-- **Tailwind CSS** for styling
-- **Apollo Client** for GraphQL integration
-- **Vite** for development and building
+The AI assistant Claude helped me figure out some of the C# modules and architecture - pretty cool learning experience actually. Made me understand the C# ecosystem better.
 
-## ✨ Features
+## Project Structure
 
-- **Task Management**
-  - Create, read, update, and delete tasks
-  - Mark tasks as complete/incomplete
-  - Task filtering and sorting
-  - Pagination support
+### Backend (/backend)
+- C# .NET Core application
+- Uses Hot Chocolate for GraphQL (way easier than writing a REST API)
+- Entity Framework Core handles the database stuff
+- SQLite database (keeps things simple, no setup needed)
 
-- **User Experience**
-  - Clean, modern UI with Tailwind CSS
-  - Responsive design for all devices
-  - Real-time updates
-  - User preferences system
+### Frontend (/frontend)
+- React + TypeScript 
+- GraphQL client to talk to the backend
+- Basic UI for managing tasks
 
-- **Developer Experience**
-  - GraphQL API with built-in playground
-  - Type-safe frontend with TypeScript
-  - Hot Module Replacement (HMR)
-  - Comprehensive GraphQL queries and mutations
+## Getting Started
 
-## 🛠 Getting Started
+1. Start the backend:
+cd backend
+dotnet run
 
-### Prerequisites
+2. Start the frontend:
+cd frontend
+npm install
+npm start
 
-- Node.js 18+ (for frontend)
-- .NET 9.0 SDK (for backend)
-- An IDE (VS Code recommended)
+The backend runs on http://localhost:5001
+Frontend should pop up on http://localhost:3000
 
-### Installation & Setup
+## Development Notes
 
-1. Clone the repository:
-   ```bash
-   git clone [repository-url]
-   cd TaskManagementApp
-   ```
+- The GraphQL playground is at http://localhost:5001/graphql if you want to mess with the API directly
+- Hot reload works on both ends
+- Database just creates itself when you first run it
 
-2. Start the Backend:
-   ```bash
-   cd backend
-   dotnet restore
-   dotnet run
-   ```
-   Backend will start on http://localhost:5001
+## Module Choices
 
-3. Start the Frontend:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-   Frontend will start on http://localhost:5173
+- Hot Chocolate: Picked this because it's the main C# GraphQL server and has good docs
+- Entity Framework: It's just the standard ORM for C#, works fine
+- SQLite: Super simple, no setup, good enough for testing
+- React: Because that's what I know best for frontend
 
-### GraphQL API
+## Known Issues
 
-Access the GraphQL playground at http://localhost:5001/graphql
+- Auth is super basic right now
+- Probably some CORS stuff that needs fixing
+- WebSockets aren't really used yet
 
-#### Example Queries
+## Future Maybe-ToDos
 
-1. Create a task:
-```graphql
-mutation CreateTask {
-  addTask(
-    title: "Test Task"
-    description: "Task description"
-  ) {
-    id
-    title
-    description
-    isCompleted
-    createdAt
-  }
-}
-```
+If I feel like it:
+- Better auth
+- Real-time updates
+- Actually make it look nice
+- Switch to a real database if needed
 
-2. Query tasks:
-```graphql
-query GetAllTasks {
-  tasks {
-    nodes {
-      id
-      title
-      description
-      isCompleted
-      createdAt
-      completedAt
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-    }
-  }
-}
-```
+## Contributing
 
-## 📁 Project Structure
+It's just a test project, but if you want to mess with it, go ahead.
 
-```
-TaskManagementApp/
-├── backend/                 # .NET Core backend
-│   ├── Data/               # Database context
-│   ├── GraphQL/            # GraphQL types and resolvers
-│   ├── Models/            # Domain models
-│   └── Program.cs         # App configuration
-│
-├── frontend/               # Vue.js frontend
-│   ├── src/
-│   │   ├── components/    # Vue components
-│   │   ├── config/       # Configuration files
-│   │   └── assets/       # Static assets
-│   └── public/           # Public assets
-```
+## License
 
-## 📝 TODO List
-
-- [ ] Add authentication system
-- [ ] Implement user roles and permissions
-- [ ] Add task categories and tags
-- [ ] Implement task due dates and reminders
-- [ ] Add task priority levels
-- [ ] Implement task sharing between users
-- [ ] Add dark mode support
-- [ ] Implement real-time notifications
-- [ ] Add task attachments support
-- [ ] Implement task comments system
-
-## 🔧 Development Notes
-
-- Backend runs on port 5001 by default
-- Frontend runs on port 5173 with HMR enabled
-- SQLite database is created automatically on first run
-- GraphQL playground is enabled in development mode
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details 
+Whatever, do what you want with it. 

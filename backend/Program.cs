@@ -9,17 +9,6 @@
  * - WebSocket support for future real-time features
  */
 
-/*
- * Task Management API
- * 
- * This is the main entry point for the Task Management backend application.
- * It configures and sets up:
- * - GraphQL API with Hot Chocolate
- * - Entity Framework Core with SQLite
- * - CORS, Authentication, and Authorization
- * - WebSocket support for future real-time features
- */
-
 using TaskManagementAPI.Data;
 using TaskManagementAPI.GraphQL;
 using TaskManagementAPI.GraphQL.Types;
@@ -87,14 +76,6 @@ builder.Services
     .AddType<TaskType>()               // Task entity schema
     .AddType<UserPreferencesType>()    // User preferences schema
     .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);  // Development-only
-    .AddQueryType<Query>()              // Base queries
-    .AddMutationType<Mutation>()        // Data modifications
-    .AddFiltering()                     // Enable field-level filtering
-    .AddSorting()                       // Enable result sorting
-    .AddProjections()                   // Optimize query selections
-    .AddType<TaskType>()               // Task entity schema
-    .AddType<UserPreferencesType>()    // User preferences schema
-    .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);  // Development-only
 
 var app = builder.Build();
 
@@ -127,16 +108,10 @@ app.MapGraphQL()
             Enable = true,                      // Enable GraphQL playground
             Title = "Task Management API",      // UI title
             GraphQLEndpoint = "/graphql"        // API endpoint path
-            Enable = true,                      // Enable GraphQL playground
-            Title = "Task Management API",      // UI title
-            GraphQLEndpoint = "/graphql"        // API endpoint path
         },
-        EnableGetRequests = true,              // Support GET requests for queries
-        EnableSchemaRequests = true            // Enable schema introspection
         EnableGetRequests = true,              // Support GET requests for queries
         EnableSchemaRequests = true            // Enable schema introspection
     });
 
-// Start the application
 // Start the application
 app.Run();

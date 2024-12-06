@@ -1,7 +1,7 @@
 # Task Management API Case study / project
 
-This is my experimental project to learn how to build a C# backend with a React frontend. I wanted to try making something like a headless CMS to manage tasks and stuff.
-
+This is my experimental project to learn how to build a C# backend with a React frontend. I wanted to try making something like a headless CMS to manage tasks, to get familiar with a job posting which is doing something along these lines (though probably far from the same). Up until now I found it to be a reallu cool approach, especially given that CMS's for large ogranisations with a lot of (sub)organisations can easily lead to a very bloaty experience.
+ 
 ## What's This All About?
 
 It's basically a task manager where I'm testing out:

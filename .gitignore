@@ -55,4 +55,4 @@ yarn-error.log*
 *.sw?
 
 # Personal notes/documentation
-whatdoeseverythingdo.md    # My personal 'quick' notepad for when working on this project - not really insightful for others. PS: I primarily use Obsidian for this kind of stuff.
+whatdoeseverythingdo.md

@@ -1,4 +1,4 @@
-# Task Management API Thing
+# Task Management API Case study / project
 
 This is my experimental project to learn how to build a C# backend with a React frontend. I wanted to try making something like a headless CMS to manage tasks and stuff.
 

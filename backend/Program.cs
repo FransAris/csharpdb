@@ -15,6 +15,7 @@ using TaskManagementAPI.GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +64,15 @@ builder.Services
     .AddType<TaskType>()
     .AddType<TaskLabelType>()
     .AddType<UserPreferencesType>()
-    .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
+    .AddType<TaskStateType>()
+    .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true)
+    .AddErrorFilter<GraphQLErrorFilter>();
+
+builder.Services.AddLogging(logging =>
+{
+    logging.AddConsole();
+    logging.AddDebug();
+});
 
 var app = builder.Build();
 
@@ -90,3 +99,34 @@ app.MapGraphQL();
 
 // Start the application
 app.Run();
+
+public class GraphQLErrorFilter : IErrorFilter
+{
+    private readonly ILogger<GraphQLErrorFilter> _logger;
+
+    public GraphQLErrorFilter(ILogger<GraphQLErrorFilter> logger)
+    {
+        _logger = logger;
+    }
+
+    public IError OnError(IError error)
+    {
+        var exception = error.Exception;
+        while (exception?.InnerException != null)
+        {
+            exception = exception.InnerException;
+        }
+
+        _logger.LogError(
+            error.Exception,
+            "GraphQL Error: {Message}\nPath: {Path}\nException: {Exception}",
+            error.Message,
+            error.Path,
+            exception?.ToString() ?? "No exception details"
+        );
+
+        return error.WithMessage(
+            error.Exception?.Message ?? error.Message
+        );
+    }
+}

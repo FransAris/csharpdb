@@ -1,18 +1,28 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache, createHttpLink, ApolloLink } from '@apollo/client';
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:5001/graphql',
+});
+
+const loggerLink = new ApolloLink((operation, forward) => {
+  console.log('GraphQL Request:', {
+    operationName: operation.operationName,
+    variables: operation.variables,
+    query: operation.query
+  });
+
+  return forward(operation).map((response) => {
+    console.log('GraphQL Response:', response);
+    return response;
+  });
+});
 
 export const client = new ApolloClient({
-  uri: "http://localhost:5001/graphql",
+  link: ApolloLink.from([loggerLink, httpLink]),
   cache: new InMemoryCache(),
   defaultOptions: {
-    watchQuery: {
-      fetchPolicy: 'network-only',  // Don't cache, always fetch from network
-      nextFetchPolicy: 'network-only'
-    },
-    query: {
-      fetchPolicy: 'network-only'
-    },
     mutate: {
-      fetchPolicy: 'no-cache'
+      errorPolicy: 'all'
     }
   }
 });

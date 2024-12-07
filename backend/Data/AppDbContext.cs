@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
 
     public DbSet<TaskModel> Tasks => Set<TaskModel>();
     public DbSet<UserPreferencesModel> UserPreferences => Set<UserPreferencesModel>();
+    public DbSet<TaskLabel> TaskLabels => Set<TaskLabel>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,5 +44,20 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<UserPreferencesModel>()
             .Property(u => u.Language)
             .HasMaxLength(10);
+
+        // Configure TaskLabel
+        modelBuilder.Entity<TaskLabel>()
+            .HasKey(t => t.Id);
+
+        modelBuilder.Entity<TaskLabel>()
+            .Property(t => t.Name)
+            .IsRequired()
+            .HasMaxLength(200);
+
+        // Configure Task-Label relationship
+        modelBuilder.Entity<TaskModel>()
+            .HasOne(t => t.Label)
+            .WithMany(l => l.Tasks)
+            .HasForeignKey(t => t.LabelId);
     }
 }

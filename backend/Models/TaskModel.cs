@@ -1,3 +1,5 @@
+using System;
+
 namespace TaskManagementAPI.Models;
 
 public class TaskModel
@@ -8,4 +10,6 @@ public class TaskModel
     public bool IsCompleted { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? CompletedAt { get; set; }
+    public int? LabelId { get; set; }
+    public virtual TaskLabel? Label { get; set; }
 }

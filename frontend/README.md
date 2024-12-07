@@ -1,90 +1,76 @@
 # Task Management Frontend
 
-The Vue.js frontend for our Task Management System, built with TypeScript and Tailwind CSS.
+React frontend for our task management app, built with TypeScript and Tailwind CSS. On which I spent more time than the backend because that always happens for some reason.
 
-## 🛠 Tech Stack
+## Tech Stack
 
-- **Vue.js 3** - Progressive JavaScript Framework
-- **TypeScript** - Type Safety and Better Developer Experience
-- **Tailwind CSS** - Utility-first CSS Framework
-- **Apollo Client** - GraphQL Client
-- **Vite** - Next Generation Frontend Tooling
+- React
+- TypeScript 
+- Tailwind CSS
+- Apollo Client
+- Vite
 
-## 📦 Features
+## Features
 
-- Modern, responsive UI
-- Real-time task management
-- GraphQL integration with Apollo Client
-- Type-safe development with TypeScript
-- Utility-first styling with Tailwind CSS
+- Kanban board with drag-and-drop
+- Label system
+- Real-time updates
+- Type-safe code
+- Modern UI
 
-## 🚀 Getting Started
+## Quick Start
 
-1. Install dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Start development server:
+Start dev server:
 
 ```bash
 npm run dev
 ```
 
-3. Build for production:
+Build:
 
 ```bash
 npm run build
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
-├── components/     # Reusable Vue components
-├── config/        # Configuration files (Apollo, etc.)
-├── assets/        # Static assets
+├── components/     # React components
+├── features/      # Main features
+├── config/        # Config files
+├── utils/         # Helpers
 └── App.tsx        # Root component
 ```
 
-## 🔧 Development
+## Development Commands
 
-### Type Checking
+Type checking:
 
 ```bash
 npm run type-check
 ```
 
-### Linting
+Linting:
 
 ```bash
 npm run lint
 ```
 
-### Building
+## Future Ideas
 
-```bash
-npm run build
-```
-
-## 📝 TODO
-
-- [ ] Add authentication UI
-- [ ] Implement dark mode
-- [ ] Add task filtering components
-- [ ] Implement task categories UI
-- [ ] Add task priority indicators
-- [ ] Implement task sharing UI
-- [ ] Add real-time notifications
-- [ ] Implement file upload for attachments
-- [ ] Add task comments UI
-- [ ] Implement user preferences panel
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+- Dark mode
+- Task filtering
+- Task categories
+- Priority flags
+- Task sharing
+- Real-time notifications
+- File attachments
+- Comments
+- User preferences

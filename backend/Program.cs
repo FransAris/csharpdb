@@ -14,36 +14,30 @@ using TaskManagementAPI.GraphQL;
 using TaskManagementAPI.GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using HotChocolate.AspNetCore;
+using Microsoft.AspNetCore.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // === Security Configuration ===
-// === Security Configuration ===
 // Configure CORS to allow any origin, header, and method
-// TODO: In production, restrict this to specific origins
 // TODO: In production, restrict this to specific origins
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
+    options.AddPolicy("DevelopmentCors", builder =>
+    {
+        builder
+            .WithOrigins("http://localhost:5173") // Specific Vite dev server
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithExposedHeaders("Content-Range"); // Only if we need it for pagination
+    });
 });
 
 // Add authentication and authorization services
 // TODO: Implement proper authentication with JWT or similar
-// TODO: Implement proper authentication with JWT or similar
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
 
-// === Database Configuration ===
-// Configure DbContext with connection pooling for better performance
-// Using SQLite for development
-// TODO: Consider using PostgreSQL or SQL Server for production
 // === Database Configuration ===
 // Configure DbContext with connection pooling for better performance
 // Using SQLite for development
@@ -59,23 +53,17 @@ builder.Services
 // - Filtering, sorting, and projection capabilities
 // - Custom type definitions
 // - Development-friendly error details
-// === GraphQL Configuration ===
-// Set up GraphQL server with Hot Chocolate
-// This configures:
-// - Query and mutation types
-// - Filtering, sorting, and projection capabilities
-// - Custom type definitions
-// - Development-friendly error details
 builder.Services
     .AddGraphQLServer()
-    .AddQueryType<Query>()              // Base queries
-    .AddMutationType<Mutation>()        // Data modifications
-    .AddFiltering()                     // Enable field-level filtering
-    .AddSorting()                       // Enable result sorting
-    .AddProjections()                   // Optimize query selections
-    .AddType<TaskType>()               // Task entity schema
-    .AddType<UserPreferencesType>()    // User preferences schema
-    .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);  // Development-only
+    .AddQueryType<Query>()
+    .AddMutationType<Mutation>()
+    .AddFiltering()
+    .AddSorting()
+    .AddProjections()
+    .AddType<TaskType>()
+    .AddType<TaskLabelType>()
+    .AddType<UserPreferencesType>()
+    .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
 
 var app = builder.Build();
 
@@ -84,34 +72,21 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();    // Detailed error pages in development
-    app.UseDeveloperExceptionPage();    // Detailed error pages in development
+    app.UseCors("DevelopmentCors");  // Use our more specific policy
 }
 
 // === HTTP Pipeline Configuration ===
 // Configure middleware in the correct order
-app.UseRouting();                // Enable endpoint routing
-app.UseDefaultFiles();           // Serve index.html by default
-app.UseStaticFiles();           // Enable serving static files
-app.UseWebSockets();            // Enable WebSocket support for future real-time features
-app.UseCors("AllowAll");
-app.UseAuthentication();        // Handle authentication
-app.UseAuthorization();         // Handle authorization
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseWebSockets();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 // === GraphQL Endpoint Configuration ===
 // Set up the GraphQL endpoint with Banana UI for testing
-// === GraphQL Endpoint Configuration ===
-// Set up the GraphQL endpoint with Banana UI for testing
-app.MapGraphQL()
-    .WithOptions(new GraphQLServerOptions
-    {
-        Tool = { 
-            Enable = true,                      // Enable GraphQL playground
-            Title = "Task Management API",      // UI title
-            GraphQLEndpoint = "/graphql"        // API endpoint path
-        },
-        EnableGetRequests = true,              // Support GET requests for queries
-        EnableSchemaRequests = true            // Enable schema introspection
-    });
+app.MapGraphQL();
 
 // Start the application
 app.Run();

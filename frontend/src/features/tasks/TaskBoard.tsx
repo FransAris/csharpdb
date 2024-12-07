@@ -8,6 +8,7 @@ import {
   DraggableStateSnapshot,
   DroppableProvided
 } from 'react-beautiful-dnd';
+import { useNavigate } from 'react-router-dom';
 
 import { StrictModeDroppable } from '../../components/common/StrictModeDroppable';
 import { LabelManager } from '../labels/LabelManager';
@@ -43,6 +44,7 @@ import {
  * management stuff. Could probably split some of this out later if it grows more.
  */
 export const TaskBoard: React.FC<TaskBoardProps> = ({ labelId }) => {
+  const navigate = useNavigate();
   const [isAddingTask, setIsAddingTask] = useState<string | null>(null);
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
@@ -52,18 +54,39 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({ labelId }) => {
   const [editDescription, setEditDescription] = useState('');
   const [editLabelId, setEditLabelId] = useState<number | null>(null);
 
-  const { data, loading, error } = useQuery(GET_TASKS);
+  const { data, loading, error } = useQuery(GET_TASKS, {
+    variables: { labelId: labelId ? parseInt(labelId) : null },
+    fetchPolicy: 'network-only'
+  });
 
   console.log('TaskBoard data:', { data, loading, error, labelId });
 
   const { data: labelsData, loading: labelsLoading } = useQuery<{ labels: { nodes: Label[] } }>(GET_LABELS);
   
   const [updateTaskStatus] = useMutation(UPDATE_TASK_STATUS, {
-    refetchQueries: [{ query: GET_TASKS }]
+    refetchQueries: [{ 
+      query: GET_TASKS,
+      variables: { labelId: labelId ? parseInt(labelId) : null }
+    }]
   });
-  const [updateTaskDetails] = useMutation(UPDATE_TASK_DETAILS);
-  const [addTask] = useMutation(ADD_TASK);
-  const [deleteTask] = useMutation(DELETE_TASK);
+  const [updateTaskDetails] = useMutation(UPDATE_TASK_DETAILS, {
+    refetchQueries: [{ 
+      query: GET_TASKS,
+      variables: { labelId: labelId ? parseInt(labelId) : null }
+    }]
+  });
+  const [addTask] = useMutation(ADD_TASK, {
+    refetchQueries: [{ 
+      query: GET_TASKS,
+      variables: { labelId: labelId ? parseInt(labelId) : null }
+    }]
+  });
+  const [deleteTask] = useMutation(DELETE_TASK, {
+    refetchQueries: [{ 
+      query: GET_TASKS,
+      variables: { labelId: labelId ? parseInt(labelId) : null }
+    }]
+  });
 
   const onDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
@@ -112,16 +135,19 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({ labelId }) => {
     }
   };
 
+  const handleLabelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLabelId = e.target.value;
+    navigate(newLabelId ? `/?labelId=${newLabelId}` : '/', { replace: true });
+  };
+
   // Show loading/error states - keeping it simple!
   if (loading) return <div className="text-center py-4">Loading tasks...</div>;
   if (error) return <div className="text-center py-4 text-red-600">Error loading tasks: {error.message}</div>;
   if (!data) return <div className="text-center py-4">No tasks found</div>;
 
-  // Filter tasks if a label is selected
-  const filteredTasks = data.tasks.nodes.filter((task: Task) => 
-    !labelId || task.labelId === parseInt(labelId)
-  );
-
+  // Remove the client-side filtering since it's now handled by the backend
+  const filteredTasks = data?.tasks.nodes || [];
+  
   // Set up our columns for the Kanban board
   const columns: Record<string, Column> = {
     'TODO': {
@@ -194,7 +220,7 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({ labelId }) => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Label</label>
                 <select
                   value={labelId || ''}
-                  onChange={(e) => window.location.href = e.target.value ? `/?labelId=${e.target.value}` : '/'}
+                  onChange={handleLabelChange}
                   className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 >
                   <option value="">All Tasks</option>

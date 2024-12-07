@@ -1,6 +1,6 @@
 # Task Management API Case study / project
 
-This is my experimental project to learn how to build a C# backend with a React frontend. I wanted to try making something like a headless CMS to manage tasks, to get familiar with a job posting which is doing something along these lines (though probably far from the same). Up until now I found it to be a really cool approach, especially given that CMS's for large ogranisations with a lot of (sub)organisations can easily lead to a very bloaty experience (despite best efforts). 
+This is my experimental project to learn how to build a C# backend with a React frontend. I wanted to try making something like a headless CMS to manage tasks, to get familiar with a job posting which is doing something along these lines (though probably far from the same). Up until now I found it to be a really cool approach, especially given that CMS's for large organisations with a lot of (sub)organisations can easily lead to a very bloaty experience (despite best efforts). 
 
 ## What's This All About?
 
@@ -9,8 +9,11 @@ It's basically a task manager where I'm testing out:
 - Entity Framework Core with SQLite (just using SQLite because it's simple for testing)
 - Some basic auth stuff (nothing fancy)
 - WebSocket support (might do real-time updates later, we'll see)
+- React with TypeScript for a type-safe frontend
+- Kanban-style board with drag-and-drop
+- Label system with custom colors
 
-The AI assistant Claude helped me figure out some of the C# modules and architecture - pretty cool learning experience actually. Made me understand the current C# ecosystem better. Last time I used it it gave off a 'Microsoft's version of Ecplise/Java Object-oriented developent'-vibe, though that could be because of the course setup which was really old-school (like; XP-era stuff was in the assignments)
+Claude helped me figure out some of the C# modules and architecture - pretty cool learning experience actually. Made me understand the current C# ecosystem better. Last time I used it it gave off a 'Microsoft's version of Ecplise/Java Object-oriented developent'-vibe, though that could be because of the course setup which was really old-school (like; XP-era stuff was in the assignments)
 
 ## Project Structure
 
@@ -23,7 +26,9 @@ The AI assistant Claude helped me figure out some of the C# modules and architec
 ### Frontend (/frontend)
 - React + TypeScript 
 - GraphQL client to talk to the backend
-- Basic UI for managing tasks
+- Kanban board with drag-and-drop
+- Label management system
+- Task filtering and organization
 
 ## Getting Started
 
@@ -37,7 +42,7 @@ The AI assistant Claude helped me figure out some of the C# modules and architec
    ```sh
    cd frontend
    npm install
-   npm start
+   npm run dev (or npm run build and then npm run start for the production lovers)
    ```
 
 The backend runs on http://localhost:5001 (5000 is default but in case a someone working on a similar project is already on it, I changed it).
@@ -55,12 +60,16 @@ Frontend should pop up on http://localhost:5173. This is because of Vite, the bu
 - Entity Framework: It's just the standard ORM for C#, works fine
 - SQLite: Super simple, no setup, good enough for testing
 - React: Because that's what I know best for frontend
+- react-beautiful-dnd: For the drag-and-drop Kanban board
+- Apollo Client: For GraphQL stuff
 
 ## Known Issues
 
 - Auth is super basic right now
 - Probably some CORS stuff that needs fixing
 - WebSockets aren't really used yet
+- Some TypeScript stuff could be better
+- Drag-and-drop needs better error handling
 
 ## Future Maybe-ToDos
 
@@ -71,6 +80,9 @@ If I have time:
 - Real-time updates
 - Actually make it look nice
 - Switch to a real database if needed (SQLite is a bit of a meme if we're talking about large-scale deployments).
+- Add dark mode because my eyes hurt
+- Add task templates for common stuff
+- Maybe add file attachments
 
 ## Contributing
 
@@ -98,7 +110,7 @@ Q: "That CORS setup is scary..."
 A: I know, I know. AllowAnyOrigin() is basically "please hack me". It's just for development! It runs locally here and realise that this is the only reason that is acceptable.
 
 Q: "Your GraphQL implementation needs work..."
-A: According to a quick scan from Claude: Missing pagination, DataLoader pattern for N+1 queries, and proper schema organization. I'll get to that.
+A: Getting better. Still need to tackle the DataLoader for N+1 queries.
 
 Q: "Where's your repository pattern?"
 A: Direct DbContext usage is quick but not great for testing or switching databases. Would need proper abstraction for production.
@@ -107,7 +119,7 @@ Q: "Authentication looks... minimal..."
 A: It's on the todo list.
 
 Q: "Your project structure is a bit flat..."
-A: Could use better separation of concerns (API/Core/Infrastructure/etc). Current structure is more "let me figure out .NET first".
+A: Backend could still use some love with better separation of concerns (API/Core/Infrastructure/etc). Rome wasn't built in a day. Neither was this. This was actually built in like two to three days.
 
 Q: "I don't see any tests..."
 A: You got me there. No unit tests, no integration tests. Would definitely need those for real development.
@@ -119,8 +131,14 @@ Q: "Performance considerations?"
 A: No caching strategy, no rate limiting, no compression. SQLite would cry in production. But in actually deployed software this stuff is also not always that good, which it should be, but that's a different story.
 
 Q: "Documentation is sparse..."
-A: Missing XML docs, no Swagger/OpenAPI. Comments are more "notes to self" right now.
+A: We've added proper TypeScript types and better component organization. Still no Swagger/OpenAPI, but the GraphQL schema is pretty self-documenting now. Comments are still more "notes to self" than proper docs though.
 
 TL;DR: It's a learning project that shows basic concepts but needs work for production. Good starting point though!
 
 *Note: All these are valid points that would need addressing for a production system. But for learning modern .NET and GraphQL? It helped. :)*
+
+## More Details
+
+Check out the internal READMEs for more info:
+- [Frontend Details](frontend/README.md) - React app stuff
+- [Backend Details](backend/README.md) - .NET API stuff

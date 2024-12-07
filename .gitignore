@@ -33,7 +33,7 @@ obj/
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
 
-## Node (for future frontend)
+## Node & React
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -43,6 +43,9 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+dist/
+build/
+coverage/
 
 ## IDE
 .idea/
@@ -54,5 +57,13 @@ yarn-error.log*
 *.sln
 *.sw?
 
-# Personal notes/documentation
+## Temp files
+*~
+*.bak
+*.backup
+
+## Misc
 whatdoeseverythingdo.md
+_backup/
+**/backup/
+**/*.backup/

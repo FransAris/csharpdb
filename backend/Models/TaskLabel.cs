@@ -3,11 +3,12 @@ namespace TaskManagementAPI.Models
     public class TaskLabel
     {
         public int Id { get; set; }
-        public required string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string Color { get; set; } = "#CCCCCC"; // Default color
+        public DateTime CreatedAt { get; set; }
         
         // Navigation property
-        public ICollection<TaskModel> Tasks { get; set; } = new List<TaskModel>();
+        public virtual ICollection<TaskModel> Tasks { get; set; } = new List<TaskModel>();
     }
 } 

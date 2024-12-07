@@ -16,7 +16,9 @@ public class Query
     public IQueryable<TaskModel> GetTasks([Service] IDbContextFactory<AppDbContext> contextFactory)
     {
         var context = contextFactory.CreateDbContext();
-        return context.Tasks.OrderByDescending(t => t.CreatedAt);
+        return context.Tasks
+            .Include(t => t.Label)
+            .OrderByDescending(t => t.CreatedAt);
     }
 
     public async Task<TaskModel?> GetTaskById(
@@ -44,5 +46,16 @@ public class Query
     {
         using var context = contextFactory.CreateDbContext();
         return await context.UserPreferences.FirstOrDefaultAsync(u => u.UserId == userId);
+    }
+
+    [UsePaging]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<TaskLabel> GetLabels(
+        [Service] IDbContextFactory<AppDbContext> contextFactory)
+    {
+        var context = contextFactory.CreateDbContext();
+        return context.TaskLabels.OrderBy(l => l.Name);
     }
 }

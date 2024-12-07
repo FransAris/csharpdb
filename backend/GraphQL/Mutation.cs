@@ -11,14 +11,16 @@ public class Mutation
     public async Task<TaskModel> AddTask(
         [Service] IDbContextFactory<AppDbContext> contextFactory,
         string title,
-        string description)
+        string description,
+        int? labelId = null)
     {
         using var context = contextFactory.CreateDbContext();
         var task = new TaskModel
         {
             Title = title,
             Description = description,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            LabelId = labelId
         };
 
         context.Tasks.Add(task);
@@ -30,28 +32,20 @@ public class Mutation
     public async Task<TaskModel?> UpdateTask(
         [Service] IDbContextFactory<AppDbContext> contextFactory,
         int id,
-        string? title = null,
-        string? description = null,
-        bool? isCompleted = null)
+        bool isCompleted)
     {
         using var context = contextFactory.CreateDbContext();
-        var task = await context.Tasks.FindAsync(id);
+        var task = await context.Tasks
+            .Include(t => t.Label)  // Include the label relationship
+            .FirstOrDefaultAsync(t => t.Id == id);
+        
         if (task == null) return null;
 
-        if (title != null)
-            task.Title = title;
-
-        if (description != null)
-            task.Description = description;
-
-        if (isCompleted.HasValue)
-        {
-            task.IsCompleted = isCompleted.Value;
-            if (isCompleted.Value)
-                task.CompletedAt = DateTime.UtcNow;
-            else
-                task.CompletedAt = null;
-        }
+        task.IsCompleted = isCompleted;
+        if (isCompleted)
+            task.CompletedAt = DateTime.UtcNow;
+        else
+            task.CompletedAt = null;
 
         await context.SaveChangesAsync();
         return task;
@@ -107,5 +101,47 @@ public class Mutation
 
         await context.SaveChangesAsync();
         return preferences;
+    }
+
+    public async Task<TaskLabel> AddLabel(
+        [Service] IDbContextFactory<AppDbContext> contextFactory,
+        string name,
+        string? description = null)
+    {
+        using var context = contextFactory.CreateDbContext();
+        var label = new TaskLabel
+        {
+            Name = name,
+            Description = description,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        context.TaskLabels.Add(label);
+        await context.SaveChangesAsync();
+        return label;
+    }
+
+    public async Task<TaskModel> SetTaskLabel(
+        [Service] IDbContextFactory<AppDbContext> contextFactory,
+        int taskId,
+        int? labelId)
+    {
+        using var context = contextFactory.CreateDbContext();
+        var task = await context.Tasks.FindAsync(taskId);
+        if (task == null) throw new GraphQLException("Task not found");
+
+        task.LabelId = labelId;
+        await context.SaveChangesAsync();
+        return task;
+    }
+
+    public async Task<bool> ClearAllData(
+        [Service] IDbContextFactory<AppDbContext> contextFactory)
+    {
+        using var context = contextFactory.CreateDbContext();
+        context.Tasks.RemoveRange(context.Tasks);
+        context.TaskLabels.RemoveRange(context.TaskLabels);
+        await context.SaveChangesAsync();
+        return true;
     }
 }

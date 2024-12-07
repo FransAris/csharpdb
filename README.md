@@ -19,7 +19,7 @@ Claude helped me figure out some of the C# modules and architecture - pretty coo
 
 ### Backend (/backend)
 - C# .NET Core application
-- Uses Hot Chocolate for GraphQL (way easier than writing a REST API)
+- Uses Hot Chocolate for GraphQL (a REST API was considered but this was easier to set up)
 - Entity Framework Core handles the database stuff
 - SQLite database (keeps things simple, no setup needed)
 
@@ -56,31 +56,33 @@ Frontend should pop up on http://localhost:5173. This is because of Vite, the bu
 
 ## Module Choices
 
+NB: A bunch of these choices, especially on the back-end (e.g., Hot Chocolate and Entity), were suggested to me by AI tools, after promting them for my (short-term) needs. 
 - Hot Chocolate: Picked this because it's the main C# GraphQL server and has good docs
 - Entity Framework: It's just the standard ORM for C#, works fine
 - SQLite: Super simple, no setup, good enough for testing
 - React: Because that's what I know best for frontend
-- react-beautiful-dnd: For the drag-and-drop Kanban board
-- Apollo Client: For GraphQL stuff
+- react-beautiful-dnd: For the drag-and-drop Kanban board. It will be 'deprecated soon' but node libraries always tell you that.
+- Apollo Client: For GraphQL
 
 ## Known Issues
 
 - Auth is super basic right now
-- Probably some CORS stuff that needs fixing
+- CORS can be better
 - WebSockets aren't really used yet
 - Some TypeScript stuff could be better
-- Drag-and-drop needs better error handling
+- Drag-and-drop will probably need error handling (not extensively tested on mobile)
 
 ## Future Maybe-ToDos
 
-If I have time:
+If I have (had) time:
 - Focus on adding some functionality akin to taxonomy specific to large organisations such as universities (example chosen at random).
-- Try to add AI implementation to the project. In real life Azure would probably be used for this, but I kinda like open source solutions and can run pretty good ollmama locally so it will probably be that.
+- Try to add AI implementation to the project. Stuff like: fill in this task for me, give me a summary of this task, etc. In real life Azure would probably be used for this (if your organisation is tied up to that kind of thing), but I kinda like open source solutions and can run pretty good ollmama locally so it will probably be that.
+- Features like assign to user, due date, etc. Which will require...
 - Better auth 
 - Real-time updates
-- Actually make it look nice
+- Nicer UI/UX
 - Switch to a real database if needed (SQLite is a bit of a meme if we're talking about large-scale deployments).
-- Add dark mode because my eyes hurt
+- Add dark mode / thematic options
 - Add task templates for common stuff
 - Maybe add file attachments
 
@@ -95,43 +97,37 @@ If this gets me a job I'll licence off all my rights including the rights to thi
 ## Q&A for experienced .NET and C# devs
 
 Q: "Your Program.cs is doing way too much in one file..."
-A: Yeah, it's a bit of a God class right now. Should split it into proper configuration classes and maybe use the Startup.cs pattern. This is for now a result of time constraints, but it should be refactored.
-
-Q: "Your dependency injection is pretty basic..."
-A: True. It's the quick-and-dirty version. Here I still have a learning curve to get over to understand the current ecosystem better.
+A: Yeah, it's a bit of a God class right now. Should split it into proper configuration classes. This is for now a result of time constraints, but it should be refactored.
 
 Q: "Where's your proper configuration management?"
-A: Good point. Connection strings are hardcoded and there's no appsettings.json for different environments. Would definitely need that for a real deployment.
+A: Connection strings are hardcoded and there's no appsettings.json for different environments. Would definitely need that for a real deployment.
 
 Q: "Your error handling is... interesting..."
 A: Yep, missing global exception handling and proper logging. Also probably shouldn't show detailed errors in production. Again, time constraints play a part here (this last comment can basically be added to all of the following answers).
 
-Q: "That CORS setup is scary..."
-A: I know, I know. AllowAnyOrigin() is basically "please hack me". It's just for development! It runs locally here and realise that this is the only reason that is acceptable.
+Q: "That CORS setup is basic"
+A: It's just for development.
 
 Q: "Your GraphQL implementation needs work..."
-A: Getting better. Still need to tackle the DataLoader for N+1 queries.
+A: Getting better. I need to look into DataLoader for N+1 queries and what that is and how it works.
 
 Q: "Where's your repository pattern?"
 A: Direct DbContext usage is quick but not great for testing or switching databases. Would need proper abstraction for production.
 
-Q: "Authentication looks... minimal..."
-A: It's on the todo list.
-
 Q: "Your project structure is a bit flat..."
-A: Backend could still use some love with better separation of concerns (API/Core/Infrastructure/etc). Rome wasn't built in a day. Neither was this. This was actually built in like two to three days.
+A: Backend could still use some love with better separation of concerns (API/Core/Infrastructure/etc). Rome wasn't built in a day. Neither was this. This was actually built in like two to three days (and nights), after I saw a job posting.
 
-Q: "I don't see any tests..."
-A: You got me there. No unit tests, no integration tests. Would definitely need those for real development.
+Q: "There are no tests?"
+A: No unit tests, no integration tests. Of course this is a need for real development.
 
 Q: "Your middleware ordering?"
-A: Yeah, the pipeline could use some work. There's no limiting or (health) checks but for such a small project I skipped that"
+A: Yeah, the pipeline could use some work. There's no limiting or (health) checks but for such a small project I skipped that.
 
 Q: "Performance considerations?"
-A: No caching strategy, no rate limiting, no compression. SQLite would cry in production. But in actually deployed software this stuff is also not always that good, which it should be, but that's a different story.
+A: No caching strategy, no rate limiting, no compression. SQLite would cry in production. But that's beside the point. In actually deployed software this stuff is also not always that good, which it should be, but that's a different story.
 
-Q: "Documentation is sparse..."
-A: We've added proper TypeScript types and better component organization. Still no Swagger/OpenAPI, but the GraphQL schema is pretty self-documenting now. Comments are still more "notes to self" than proper docs though.
+Q: "Documentation a bit sparse"
+A: We've added proper TypeScript types and better component organization. The GraphQL schema is pretty ok now, but I first want to improve my understanding of the 'ecosystem' before adding stuff (with AI) which might not even be correct.
 
 TL;DR: It's a learning project that shows basic concepts but needs work for production. Good starting point though!
 

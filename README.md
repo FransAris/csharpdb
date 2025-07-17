@@ -94,45 +94,6 @@ It's just a test project, but if you want to mess with it, go ahead. Does anyone
 
 If this gets me a job I'll licence off all my rights including the rights to this README and also my soul to whoever hires me.
 
-## Q&A for experienced .NET and C# devs
-
-Q: "Your Program.cs is doing way too much in one file..."
-A: Yeah, it's a bit of a God class right now. Should split it into proper configuration classes. This is for now a result of time constraints, but it should be refactored.
-
-Q: "Where's your proper configuration management?"
-A: Connection strings are hardcoded and there's no appsettings.json for different environments. Would definitely need that for a real deployment.
-
-Q: "Your error handling is... interesting..."
-A: Yep, missing global exception handling and proper logging. Also probably shouldn't show detailed errors in production. Again, time constraints play a part here (this last comment can basically be added to all of the following answers).
-
-Q: "That CORS setup is basic"
-A: It's just for development.
-
-Q: "Your GraphQL implementation needs work..."
-A: Getting better. I need to look into DataLoader for N+1 queries and what that is and how it works.
-
-Q: "Where's your repository pattern?"
-A: Direct DbContext usage is quick but not great for testing or switching databases. Would need proper abstraction for production.
-
-Q: "Your project structure is a bit flat..."
-A: Backend could still use some love with better separation of concerns (API/Core/Infrastructure/etc). Rome wasn't built in a day. Neither was this. This was actually built in like two to three days (and nights), after I saw a job posting.
-
-Q: "There are no tests?"
-A: No unit tests, no integration tests. Of course this is a need for real development.
-
-Q: "Your middleware ordering?"
-A: Yeah, the pipeline could use some work. There's no limiting or (health) checks but for such a small project I skipped that.
-
-Q: "Performance considerations?"
-A: No caching strategy, no rate limiting, no compression. SQLite would cry in production. But that's beside the point. In actually deployed software this stuff is also not always that good, which it should be, but that's a different story.
-
-Q: "Documentation a bit sparse"
-A: We've added proper TypeScript types and better component organization. The GraphQL schema is pretty ok now, but I first want to improve my understanding of the 'ecosystem' before adding stuff (with AI) which might not even be correct.
-
-TL;DR: It's a learning project that shows basic concepts but needs work for production. Good starting point though!
-
-*Note: All these are valid points that would need addressing for a production system. But for learning modern .NET and GraphQL? It helped. :)*
-
 ## More Details
 
 Check out the internal READMEs for more info:
